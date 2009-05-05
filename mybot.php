@@ -73,6 +73,7 @@ class mybot
         // bot処理内容エラーチェック
         $exec_result = shell_exec("php -l " . $file_name);
         if (!preg_match("/^No syntax errors/", $exec_result)) {
+            unlink($file_name);
             $this->_disconnect();
             $this->_message($pattern . ' : ' . $exec_result);
             return;
