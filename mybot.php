@@ -64,14 +64,23 @@ class mybot
             $this->_message('DBエラーった:mysql_fetch_object');
             return;
         }
-        // bot処理実行
-        try {
-            eval($row->phpcode);
-        } catch (Exception $e) {
+        // bot処理内容を一時ファイルに書き出し
+        $file_name = sprintf("%s/%s_%s.php", 
+            TMP_FILE_DIR, 
+            $pattern, 
+            md5(uniqid(rand(), true)));
+        file_put_contents($file_name, "<?php\n" . $row->phpcode . "\n?>");
+        // bot処理内容エラーチェック
+        $exec_result = exec("php -l " . $file_name);
+        if (!preg_match("/^No syntax errors/", $exec_result)) {
             $this->_disconnect();
-            $this->_message('phpcodeからのエラー:' . $e->getMessage());
+            $this->_message($pattern . ' : ' . $exec_result);
             return;
         }
+        // bot処理実行
+        require($file_name);
+        // 一時ファイル削除
+        unlink($file_name);
         // DB切断
         $this->_disconnect();
     }
