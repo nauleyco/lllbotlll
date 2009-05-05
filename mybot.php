@@ -71,7 +71,7 @@ class mybot
             md5(uniqid(rand(), true)));
         file_put_contents($file_name, "<?php\n" . $row->phpcode . "\n?>");
         // bot処理内容エラーチェック
-        $exec_result = exec("php -l " . $file_name);
+        $exec_result = shell_exec("php -l " . $file_name);
         if (!preg_match("/^No syntax errors/", $exec_result)) {
             $this->_disconnect();
             $this->_message($pattern . ' : ' . $exec_result);
