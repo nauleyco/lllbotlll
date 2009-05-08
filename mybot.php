@@ -55,7 +55,7 @@ class mybot
         if (!$count = mysql_num_rows($result)) {
             $this->_disconnect();
             $message = (strlen($pattern)) ? 
-                '「' . $pattern . '」ないづら。' : 'パターン入れてちょ☆';
+                '「' . $pattern . '」ないづらずら。' : 'パターン入れてちょ☆';
             $this->_message($message);
             return;
         }
